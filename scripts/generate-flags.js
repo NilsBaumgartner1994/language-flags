@@ -1,8 +1,8 @@
 const fs = require('fs');
 const axios = require('axios');
 const { createCanvas } = require('canvas');
+const csv = require('csv-parser');
 
-// Lets start
 // Alphabet-Farben zuordnen
 const alphabetColors = (() => {
   const colors = {};
@@ -39,26 +39,39 @@ function createFlag(isoCode, colors, size = 200) {
 // Hauptprozess
 async function main() {
   try {
-    const response = await axios.get('https://datahub.io/core/language-codes/r/language-codes.json');
-    const languages = response.data.map((lang) => lang['alpha2']); // ISO-Codes extrahieren
+    // CSV-Datei herunterladen und verarbeiten
+    const csvUrl = 'https://datahub.io/core/language-codes/r/language-codes.csv';
+    const response = await axios.get(csvUrl, { responseType: 'stream' });
 
-    // Sicherstellen, dass Flags-Ordner existiert
-    const flagsDir = './flags';
-    if (!fs.existsSync(flagsDir)) {
-      fs.mkdirSync(flagsDir);
-    }
+    const languages = [];
+    response.data
+      .pipe(csv())
+      .on('data', (row) => {
+        if (row['alpha2']) {
+          languages.push(row['alpha2']);
+        }
+      })
+      .on('end', () => {
+        console.log(`Fetched ${languages.length} language codes.`);
 
-    // Flags generieren und speichern
-    languages.forEach((isoCode) => {
-      const colors = getColorsForISO(isoCode);
-      const flag = createFlag(isoCode, colors);
+        // Sicherstellen, dass Flags-Ordner existiert
+        const flagsDir = './flags';
+        if (!fs.existsSync(flagsDir)) {
+          fs.mkdirSync(flagsDir);
+        }
 
-      const filePath = `${flagsDir}/${isoCode}.png`;
-      fs.writeFileSync(filePath, flag);
-      console.log(`Generated flag for ${isoCode}`);
-    });
+        // Flags generieren und speichern
+        languages.forEach((isoCode) => {
+          const colors = getColorsForISO(isoCode);
+          const flag = createFlag(isoCode, colors);
+
+          const filePath = `${flagsDir}/${isoCode}.png`;
+          fs.writeFileSync(filePath, flag);
+          console.log(`Generated flag for ${isoCode}`);
+        });
+      });
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error:', error.message);
   }
 }
 
