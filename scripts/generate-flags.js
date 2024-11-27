@@ -2,6 +2,7 @@ const fs = require('fs');
 const axios = require('axios');
 const { createCanvas } = require('canvas');
 
+// Lets start
 // Alphabet-Farben zuordnen
 const alphabetColors = (() => {
   const colors = {};
