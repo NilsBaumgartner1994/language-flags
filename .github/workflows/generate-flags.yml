@@ -2,8 +2,9 @@ name: Generate Flags
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - scripts/generate-flags.js # Trigger when the script changes
+  workflow_dispatch: # Allow manual triggering
 
 jobs:
   generate-icons:
