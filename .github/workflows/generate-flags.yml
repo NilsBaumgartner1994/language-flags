@@ -1,0 +1,44 @@
+name: Generate Flags
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-icons:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies and generate package-lock.json if missing
+        run: |
+          if [ ! -f package-lock.json ]; then
+            echo "package-lock.json does not exist. Generating it..."
+            npm install
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add package-lock.json
+            git commit -m "Add package-lock.json"
+            git push
+          else
+            echo "package-lock.json exists. Proceeding with installation..."
+            npm install
+          fi
+
+      - name: Run script to generate flags
+        run: node scripts/generate-flags.js
+
+      - name: Commit and push flags
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add flags/
+          git commit -m "Generate language flags"
+          git push
