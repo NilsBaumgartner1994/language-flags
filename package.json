@@ -1,0 +1,15 @@
+{
+  "name": "language-icons",
+  "version": "1.0.0",
+  "description": "Generate round icons based on ISO language codes with unique colors for each character in the alphabet.",
+  "main": "scripts/generate-flags.js",
+  "scripts": {
+    "generate": "node scripts/generate-flags.js"
+  },
+  "dependencies": {
+    "axios": "^1.5.0",
+    "canvas": "^2.11.2"
+  },
+  "author": "",
+  "license": "MIT"
+}
