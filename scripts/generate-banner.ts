@@ -10,10 +10,10 @@ const GIF_FILE_SMALL = `${OUTPUT_DIR}/scrolling-flags-banner-small.gif`;
 const GIF_FILE_FULL = `${OUTPUT_DIR}/scrolling-flags-banner.gif`;
 
 // Constants
-const FLAG_WIDTH = 128; // Width of each flag
-const FLAG_HEIGHT = 128; // Height of each flag
+const FLAG_WIDTH = 64; // Width of each flag
+const FLAG_HEIGHT = 64; // Height of each flag
 const TEXT_DEFAULT_WIDTH = 200; // Default width for text areas
-const NUM_COLUMNS = 3; // Number of columns (e.g., FLAG TEXT | FLAG TEXT | FLAG TEXT)
+const NUM_COLUMNS = 5; // Number of columns (e.g., FLAG TEXT | FLAG TEXT | FLAG TEXT)
 const FRAME_DELAY = 50; // Frame delay in ms (20 FPS)
 const SCROLL_SPEED = 4; // Pixels to scroll per frame
 const AMOUNT_VISIBLE_ROWS = 3; // Number of rows visible at a time
