@@ -5,6 +5,8 @@ on:
     paths:
       - 'scripts/generate-flags.js'
       - '.github/workflows/generate-flags.yml'
+      - 'package.json'
+      - 'package-lock.json'
   workflow_dispatch:
 
 jobs:
@@ -15,13 +17,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
         with:
-          node-version: '18'
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-      - name: Install dependencies
+      - name: Install dependencies if needed
+        if: ${{ github.event_name == 'push' && github.event.head_commit.modified && contains(github.event.head_commit.modified, 'package.json') }}
         run: npm install
+
+      - name: Clean install (npm ci)
+        run: npm ci
 
       - name: Generate flags
         run: node scripts/generate-flags.js
