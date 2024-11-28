@@ -28,17 +28,21 @@ const generateFlag = (isoCode) => {
 
     // Draw the colored ring
     ctx.beginPath();
-    ctx.arc(128, 128, outerRadius, 0, Math.PI * 2);
-    ctx.arc(128, 128, innerRadius, Math.PI * 2, 0, true);
-    ctx.closePath();
+    ctx.arc(128, 128, outerRadius, 0, Math.PI * 2, false); // Outer arc
+    ctx.arc(128, 128, innerRadius, Math.PI * 2, 0, true); // Inner arc (reversed)
     ctx.fillStyle = color;
     ctx.fill();
 
-    // Draw only the outer edge of the ring
+    // Draw black separators for the ring's outer and inner edges
     ctx.beginPath();
     ctx.arc(128, 128, outerRadius, 0, Math.PI * 2);
-    ctx.closePath();
-    ctx.lineWidth = 2; // Line thickness
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(128, 128, innerRadius, 0, Math.PI * 2);
+    ctx.lineWidth = 2;
     ctx.strokeStyle = 'black';
     ctx.stroke();
   });
