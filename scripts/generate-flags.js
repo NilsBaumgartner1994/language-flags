@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const { createCanvas } = require('canvas');
 const ISO6391 = require('iso-639-1');
 const countries = require('country-codes-list').customList('countryCode', '{officialLanguageISO6391Code}');
@@ -29,17 +30,40 @@ const generateFlag = (langCode) => {
   return canvas.toBuffer();
 };
 
-// Ensure flags directory exists
-if (!fs.existsSync('flags')) {
-  fs.mkdirSync('flags');
-}
-
-// Generate flags for all language-country combinations
-Object.entries(countries).forEach(([countryCode, langCode]) => {
-  if (ISO6391.validate(langCode)) {
-    const fullCode = `${langCode}-${countryCode}`;
-    const buffer = generateFlag(fullCode);
-    fs.writeFileSync(`flags/${fullCode}.png`, buffer);
-    console.log(`Generated flag for ${fullCode}`);
+// Delete all files in the flags directory
+const clearFlagsDirectory = (flagsDir) => {
+  if (fs.existsSync(flagsDir)) {
+    fs.readdirSync(flagsDir).forEach((file) => {
+      const filePath = path.join(flagsDir, file);
+      if (fs.lstatSync(filePath).isFile()) {
+        fs.unlinkSync(filePath);
+      }
+    });
+    console.log('Flags directory cleared.');
   }
-});
+};
+
+// Main process
+(async () => {
+  const flagsDir = './flags';
+
+  // Ensure the flags directory exists
+  if (!fs.existsSync(flagsDir)) {
+    fs.mkdirSync(flagsDir);
+  } else {
+    clearFlagsDirectory(flagsDir);
+  }
+
+  // Generate flags for all language-country combinations
+  Object.entries(countries).forEach(([countryCode, langCode]) => {
+    if (ISO6391.validate(langCode)) {
+      const fullCode = `${langCode}-${countryCode}`;
+      const buffer = generateFlag(fullCode);
+      const filePath = path.join(flagsDir, `${fullCode}.png`);
+      fs.writeFileSync(filePath, buffer);
+      console.log(`Generated flag for: ${fullCode}`);
+    }
+  });
+
+  console.log('All flags generated successfully.');
+})();
