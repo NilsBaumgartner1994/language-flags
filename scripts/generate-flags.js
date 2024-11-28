@@ -1,109 +1,45 @@
 const fs = require('fs');
-const axios = require('axios');
 const { createCanvas } = require('canvas');
-const csv = require('csv-parser');
-const path = require('path');
+const ISO6391 = require('iso-639-1');
+const countries = require('country-codes-list').customList('countryCode', '{officialLanguageISO6391Code}');
 
-// Alphabet-Farben zuordnen
-const alphabetColors = (() => {
-  const colors = {};
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach((char, index) => {
-    const hue = (index * 360) / 26; // Jede Farbe basierend auf dem Alphabet
-    colors[char] = `hsl(${hue}, 100%, 50%)`;
-  });
-  return colors;
-})();
+// Map characters to colors
+const charToColor = (char) => {
+  const code = char.toUpperCase().charCodeAt(0);
+  const hue = (code % 36) * 10; // Spread hues across the spectrum
+  return `hsl(${hue}, 100%, 50%)`;
+};
 
-// Farben für ISO-Code erhalten
-function getColorsForISO(code) {
-  return code.toUpperCase().split('').map((char) => alphabetColors[char] || '#000000');
-}
-
-// Runde Flagge generieren
-function createFlag(isoCode, colors, size = 200) {
-  const canvas = createCanvas(size, size);
+// Generate flag for a given language code
+const generateFlag = (langCode) => {
+  const canvas = createCanvas(200, 200);
   const ctx = canvas.getContext('2d');
+  const chars = langCode.split('');
+  const segmentAngle = (2 * Math.PI) / chars.length;
 
-  const ringWidth = size / (2 * colors.length); // Breite der Farbringe
-  colors.forEach((color, index) => {
+  chars.forEach((char, index) => {
     ctx.beginPath();
-    ctx.arc(size / 2, size / 2, size / 2 - index * ringWidth, 0, Math.PI * 2);
-    ctx.arc(size / 2, size / 2, size / 2 - (index + 1) * ringWidth, Math.PI * 2, 0, true);
+    ctx.moveTo(100, 100);
+    ctx.arc(100, 100, 100, index * segmentAngle, (index + 1) * segmentAngle);
     ctx.closePath();
-    ctx.fillStyle = color;
+    ctx.fillStyle = charToColor(char);
     ctx.fill();
   });
 
-  return canvas.toBuffer(); // Rückgabe als Bildpuffer
+  return canvas.toBuffer();
+};
+
+// Ensure flags directory exists
+if (!fs.existsSync('flags')) {
+  fs.mkdirSync('flags');
 }
 
-// Ordner löschen
-function deleteFolderRecursive(folderPath) {
-  if (fs.existsSync(folderPath)) {
-    fs.readdirSync(folderPath).forEach((file) => {
-      const currentPath = path.join(folderPath, file);
-      if (fs.lstatSync(currentPath).isDirectory()) {
-        deleteFolderRecursive(currentPath);
-      } else {
-        fs.unlinkSync(currentPath); // Datei löschen
-      }
-    });
-    fs.rmdirSync(folderPath); // Ordner löschen
+// Generate flags for all language-country combinations
+Object.entries(countries).forEach(([countryCode, langCode]) => {
+  if (ISO6391.validate(langCode)) {
+    const fullCode = `${langCode}-${countryCode}`;
+    const buffer = generateFlag(fullCode);
+    fs.writeFileSync(`flags/${fullCode}.png`, buffer);
+    console.log(`Generated flag for ${fullCode}`);
   }
-}
-
-// Hauptprozess
-async function main() {
-  try {
-    const csvUrl = 'https://gist.githubusercontent.com/umpirsky/6e95c86837d2e441e035/raw/locale.csv';
-    const locales = [];
-
-    // Versuche, die Online-CSV-Datei herunterzuladen
-    try {
-      const response = await axios.get(csvUrl, { responseType: 'stream' });
-      response.data
-        .pipe(csv())
-        .on('data', (row) => {
-          if (row['locale']) {
-            locales.push(row['locale']);
-          }
-        })
-        .on('end', () => processLocales(locales));
-    } catch (error) {
-      console.error('Online file unavailable. Using local fallback.');
-      // Lokale CSV-Datei lesen
-      fs.createReadStream('./scripts/locales.csv')
-        .pipe(csv())
-        .on('data', (row) => {
-          if (row['locale']) {
-            locales.push(row['locale']);
-          }
-        })
-        .on('end', () => processLocales(locales));
-    }
-  } catch (error) {
-    console.error('Unexpected error:', error.message);
-  }
-}
-
-// Locale-Daten verarbeiten und Flaggen generieren
-function processLocales(locales) {
-  console.log(`Processing ${locales.length} locale codes.`);
-
-  // Flags-Ordner löschen und neu erstellen
-  const flagsDir = './flags';
-  deleteFolderRecursive(flagsDir);
-  fs.mkdirSync(flagsDir);
-
-  // Flags generieren und speichern
-  locales.forEach((locale) => {
-    const colors = getColorsForISO(locale);
-    const flag = createFlag(locale, colors);
-
-    const filePath = `${flagsDir}/${locale}.png`;
-    fs.writeFileSync(filePath, flag);
-    console.log(`Generated flag for ${locale}`);
-  });
-}
-
-main();
+});
