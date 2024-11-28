@@ -91,7 +91,9 @@ const generateBanner = async () => {
   const BANNER_WIDTH = NUM_COLUMNS * (FLAG_WIDTH + TEXT_DEFAULT_WIDTH); // Dynamic width based on columns
   const totalContentHeight = totalRows * FLAG_HEIGHT;
   const visibleContentHeight = BANNER_HEIGHT;
-  const maxFrames = Math.ceil((totalContentHeight - visibleContentHeight + FLAG_HEIGHT) / SCROLL_SPEED);
+  const maxFrames =
+      Math.ceil((totalContentHeight - visibleContentHeight + FLAG_HEIGHT) / SCROLL_SPEED) +
+      Math.ceil(visibleContentHeight / SCROLL_SPEED);
 
   console.log(`Total scroll height: ${totalContentHeight}px`);
   console.log(`Generating ${maxFrames} frames for the ${isSmallGif ? 'small' : 'full'} GIF...`);

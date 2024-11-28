@@ -2,8 +2,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
   <g>
     <circle cx="128" cy="128" r="128" fill="hsl(55.38461538461539, 70%, 50%)" stroke="black" stroke-width="2"/>
-    <circle cx="128" cy="128" r="96" fill="hsl(13.846153846153847, 80%, 60%)" stroke="black" stroke-width="2"/>
-    <circle cx="128" cy="128" r="64" fill="hsl(346.1538461538462, 70%, 50%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="98.5" fill="none" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="98.5" fill="hsl(13.846153846153847, 80%, 60%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="69" fill="none" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="69" fill="hsl(346.1538461538462, 70%, 50%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="39.5" fill="none" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="39.5" fill="hsl(221.53846153846155, 80%, 60%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="10" fill="none" stroke="black" stroke-width="2"/>
     <circle cx="128" cy="128" r="10" fill="black"/>
   </g>
 </svg>

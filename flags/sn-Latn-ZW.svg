@@ -2,14 +2,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
   <g>
     <circle cx="128" cy="128" r="128" fill="hsl(69.23076923076923, 70%, 50%)" stroke="black" stroke-width="2"/>
-    <circle cx="128" cy="128" r="113.77777777777777" fill="hsl(0, 80%, 60%)" stroke="black" stroke-width="2"/>
-    <circle cx="128" cy="128" r="99.55555555555556" fill="hsl(332.3076923076923, 70%, 50%)" stroke="black" stroke-width="2"/>
-    <circle cx="128" cy="128" r="85.33333333333334" fill="hsl(180, 80%, 60%)" stroke="black" stroke-width="2"/>
-    <circle cx="128" cy="128" r="71.11111111111111" fill="hsl(83.07692307692308, 70%, 50%)" stroke="black" stroke-width="2"/>
-    <circle cx="128" cy="128" r="56.888888888888886" fill="hsl(0, 80%, 60%)" stroke="black" stroke-width="2"/>
-    <circle cx="128" cy="128" r="42.66666666666667" fill="hsl(263.0769230769231, 70%, 50%)" stroke="black" stroke-width="2"/>
-    <circle cx="128" cy="128" r="28.444444444444457" fill="hsl(166.15384615384616, 80%, 60%)" stroke="black" stroke-width="2"/>
-    <circle cx="128" cy="128" r="14.222222222222229" fill="hsl(124.61538461538461, 70%, 50%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="114.88888888888889" fill="none" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="114.88888888888889" fill="hsl(0, 80%, 60%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="101.77777777777777" fill="none" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="101.77777777777777" fill="hsl(332.3076923076923, 70%, 50%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="88.66666666666666" fill="none" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="88.66666666666667" fill="hsl(180, 80%, 60%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="75.55555555555556" fill="none" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="75.55555555555556" fill="hsl(83.07692307692308, 70%, 50%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="62.44444444444444" fill="none" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="62.44444444444444" fill="hsl(0, 80%, 60%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="49.33333333333333" fill="none" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="49.33333333333334" fill="hsl(263.0769230769231, 70%, 50%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="36.22222222222223" fill="none" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="36.22222222222223" fill="hsl(166.15384615384616, 80%, 60%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="23.111111111111118" fill="none" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="23.111111111111114" fill="hsl(124.61538461538461, 70%, 50%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="10.000000000000004" fill="none" stroke="black" stroke-width="2"/>
     <circle cx="128" cy="128" r="10" fill="black"/>
   </g>
 </svg>
