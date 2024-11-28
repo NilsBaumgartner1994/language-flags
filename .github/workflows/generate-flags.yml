@@ -26,7 +26,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Clean install (npm ci)
-        run: npm ci
+        run: npm install
 
       - name: Generate flags
         run: node scripts/generate-flags.js
