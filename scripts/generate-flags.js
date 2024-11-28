@@ -55,39 +55,55 @@ function deleteFolderRecursive(folderPath) {
 // Hauptprozess
 async function main() {
   try {
-    // CSV-Datei mit vollständigen Locale Codes herunterladen
     const csvUrl = 'https://gist.githubusercontent.com/umpirsky/6e95c86837d2e441e035/raw/locale.csv';
-    const response = await axios.get(csvUrl, { responseType: 'stream' });
-
     const locales = [];
-    response.data
-      .pipe(csv())
-      .on('data', (row) => {
-        if (row['locale']) {
-          locales.push(row['locale']);
-        }
-      })
-      .on('end', () => {
-        console.log(`Fetched ${locales.length} locale codes.`);
 
-        // Flags-Ordner löschen und neu erstellen
-        const flagsDir = './flags';
-        deleteFolderRecursive(flagsDir);
-        fs.mkdirSync(flagsDir);
-
-        // Flags generieren und speichern
-        locales.forEach((locale) => {
-          const colors = getColorsForISO(locale);
-          const flag = createFlag(locale, colors);
-
-          const filePath = `${flagsDir}/${locale}.png`;
-          fs.writeFileSync(filePath, flag);
-          console.log(`Generated flag for ${locale}`);
-        });
-      });
+    // Versuche, die Online-CSV-Datei herunterzuladen
+    try {
+      const response = await axios.get(csvUrl, { responseType: 'stream' });
+      response.data
+        .pipe(csv())
+        .on('data', (row) => {
+          if (row['locale']) {
+            locales.push(row['locale']);
+          }
+        })
+        .on('end', () => processLocales(locales));
+    } catch (error) {
+      console.error('Online file unavailable. Using local fallback.');
+      // Lokale CSV-Datei lesen
+      fs.createReadStream('./scripts/locales.csv')
+        .pipe(csv())
+        .on('data', (row) => {
+          if (row['locale']) {
+            locales.push(row['locale']);
+          }
+        })
+        .on('end', () => processLocales(locales));
+    }
   } catch (error) {
-    console.error('Error:', error.message);
+    console.error('Unexpected error:', error.message);
   }
+}
+
+// Locale-Daten verarbeiten und Flaggen generieren
+function processLocales(locales) {
+  console.log(`Processing ${locales.length} locale codes.`);
+
+  // Flags-Ordner löschen und neu erstellen
+  const flagsDir = './flags';
+  deleteFolderRecursive(flagsDir);
+  fs.mkdirSync(flagsDir);
+
+  // Flags generieren und speichern
+  locales.forEach((locale) => {
+    const colors = getColorsForISO(locale);
+    const flag = createFlag(locale, colors);
+
+    const filePath = `${flagsDir}/${locale}.png`;
+    fs.writeFileSync(filePath, flag);
+    console.log(`Generated flag for ${locale}`);
+  });
 }
 
 main();
