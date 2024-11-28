@@ -25,10 +25,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install dependencies if package.json or package-lock.json was edited
-        if: |
-          contains(github.event.head_commit.message, 'package.json') ||
-          contains(github.event.head_commit.message, 'package-lock.json')
+      - name: Install dependencies
         run: npm install
 
       - name: Clean install (npm ci)
