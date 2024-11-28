@@ -12,13 +12,13 @@ const charToColor = (char) => {
 
 // Generate circular flag for a given locale code
 const generateFlag = (isoCode) => {
-  const parts = isoCode.split('-'); // Split into language and region
+  const chars = isoCode.replace('-', '').split(''); // Remove dash and split into characters
   const canvas = createCanvas(200, 200);
   const ctx = canvas.getContext('2d');
-  const ringWidth = 100 / parts.length; // Width of each ring
+  const ringWidth = 100 / chars.length; // Width of each ring
 
-  parts.forEach((part, index) => {
-    const color = charToColor(part); // Generate a color for the part
+  chars.forEach((char, index) => {
+    const color = charToColor(char); // Generate a color for the character
     const radius = 100 - index * ringWidth; // Radius for the current ring
 
     // Draw the ring
