@@ -3,14 +3,16 @@ const path = require('path');
 const { createCanvas } = require('canvas');
 const locale = require('locale-codes');
 
-// Map characters to colors
-const charToColor = (char) => {
+// Map characters to colors with improved diversity
+const charToColor = (char, index) => {
   const code = char.toUpperCase().charCodeAt(0);
-  const hue = (code % 36) * 10; // Spread hues across the spectrum
-  return `hsl(${hue}, 100%, 50%)`;
+  const hue = (code % 26) * (360 / 26); // Spread hues evenly across the spectrum
+  const saturation = 70 + (index % 2) * 10; // Alternate between 70% and 80% saturation
+  const lightness = 50 + (index % 2) * 10; // Alternate between 50% and 60% lightness
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
 
-// Generate circular flag for a given locale code
+// Generate circular flag for a given locale code with black lines
 const generateFlag = (isoCode) => {
   const chars = isoCode.replace('-', '').split(''); // Remove dash and split into characters
   const canvas = createCanvas(200, 200);
@@ -18,15 +20,26 @@ const generateFlag = (isoCode) => {
   const ringWidth = 100 / chars.length; // Width of each ring
 
   chars.forEach((char, index) => {
-    const color = charToColor(char); // Generate a color for the character
-    const radius = 100 - index * ringWidth; // Radius for the current ring
+    const color = charToColor(char, index); // Generate a color for the character
+    const outerRadius = 100 - index * ringWidth; // Outer radius for the current ring
+    const innerRadius = outerRadius - ringWidth; // Inner radius for the current ring
 
-    // Draw the ring
+    // Draw the ring segment
     ctx.beginPath();
-    ctx.arc(100, 100, radius, 0, Math.PI * 2);
+    ctx.arc(100, 100, outerRadius, 0, Math.PI * 2);
+    ctx.arc(100, 100, innerRadius, Math.PI * 2, 0, true);
     ctx.closePath();
     ctx.fillStyle = color;
     ctx.fill();
+
+    // Draw black line to separate this ring
+    ctx.beginPath();
+    ctx.arc(100, 100, outerRadius, 0, Math.PI * 2);
+    ctx.arc(100, 100, innerRadius, Math.PI * 2, 0, true);
+    ctx.closePath();
+    ctx.lineWidth = 2; // Line thickness
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
   });
 
   return canvas.toBuffer();
