@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - scripts/generate-flags.js # Trigger when the script changes
+      - package.json # Trigger when the package changes
       - .github/workflows/generate-flags.yml # Trigger when the workflow file changes
   workflow_dispatch: # Allow manual triggering
 
