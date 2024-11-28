@@ -2,6 +2,7 @@ const fs = require('fs');
 const axios = require('axios');
 const { createCanvas } = require('canvas');
 const csv = require('csv-parser');
+const path = require('path');
 
 // Alphabet-Farben zuordnen
 const alphabetColors = (() => {
@@ -36,38 +37,52 @@ function createFlag(isoCode, colors, size = 200) {
   return canvas.toBuffer(); // Rückgabe als Bildpuffer
 }
 
+// Ordner löschen
+function deleteFolderRecursive(folderPath) {
+  if (fs.existsSync(folderPath)) {
+    fs.readdirSync(folderPath).forEach((file) => {
+      const currentPath = path.join(folderPath, file);
+      if (fs.lstatSync(currentPath).isDirectory()) {
+        deleteFolderRecursive(currentPath);
+      } else {
+        fs.unlinkSync(currentPath); // Datei löschen
+      }
+    });
+    fs.rmdirSync(folderPath); // Ordner löschen
+  }
+}
+
 // Hauptprozess
 async function main() {
   try {
-    // CSV-Datei herunterladen und verarbeiten
-    const csvUrl = 'https://datahub.io/core/language-codes/r/language-codes.csv';
+    // CSV-Datei mit vollständigen Locale Codes herunterladen
+    const csvUrl = 'https://gist.githubusercontent.com/umpirsky/6e95c86837d2e441e035/raw/locale.csv';
     const response = await axios.get(csvUrl, { responseType: 'stream' });
 
-    const languages = [];
+    const locales = [];
     response.data
       .pipe(csv())
       .on('data', (row) => {
-        if (row['alpha2']) {
-          languages.push(row['alpha2']);
+        if (row['locale']) {
+          locales.push(row['locale']);
         }
       })
       .on('end', () => {
-        console.log(`Fetched ${languages.length} language codes.`);
+        console.log(`Fetched ${locales.length} locale codes.`);
 
-        // Sicherstellen, dass Flags-Ordner existiert
+        // Flags-Ordner löschen und neu erstellen
         const flagsDir = './flags';
-        if (!fs.existsSync(flagsDir)) {
-          fs.mkdirSync(flagsDir);
-        }
+        deleteFolderRecursive(flagsDir);
+        fs.mkdirSync(flagsDir);
 
         // Flags generieren und speichern
-        languages.forEach((isoCode) => {
-          const colors = getColorsForISO(isoCode);
-          const flag = createFlag(isoCode, colors);
+        locales.forEach((locale) => {
+          const colors = getColorsForISO(locale);
+          const flag = createFlag(locale, colors);
 
-          const filePath = `${flagsDir}/${isoCode}.png`;
+          const filePath = `${flagsDir}/${locale}.png`;
           fs.writeFileSync(filePath, flag);
-          console.log(`Generated flag for ${isoCode}`);
+          console.log(`Generated flag for ${locale}`);
         });
       });
   } catch (error) {
