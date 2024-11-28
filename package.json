@@ -2,20 +2,28 @@
   "name": "language-flags",
   "version": "1.0.0",
   "description": "Generate circular flags based on ISO language codes and regions.",
-  "main": "scripts/generate-flags.js",
+  "main": "dist/generate-flags.js",
   "scripts": {
-    "generate": "node scripts/generate-flags.js"
+    "build": "tsc",
+    "generate": "node dist/generate-flags.js",
+    "start": "npm run build && npm run generate && npm run generateBanner",
+    "generateBanner": "node dist/generate-banner.js",
+    "clean": "rm -rf dist"
   },
   "dependencies": {
     "canvas": "^2.11.2",
     "country-codes-list": "^1.6.0",
+    "gifencoder": "^2.0.1",
     "iso-639-1": "^2.1.14",
     "locale-codes": "^1.3.0",
-    "xmlbuilder": "^15.1.1"
+    "rimraf": "^6.0.1",
+    "xmlbuilder": "^15.1.1",
+    "xmlbuilder2": "^3.1.1"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/gifencoder": "^2.0.3",
     "@types/node": "^22.10.1",
     "typescript": "^5.7.2"
   }

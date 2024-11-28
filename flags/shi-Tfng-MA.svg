@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <g>
+    <circle cx="128" cy="128" r="128" fill="hsl(69.23076923076923, 70%, 50%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="115.2" fill="hsl(276.9230769230769, 80%, 60%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="102.4" fill="hsl(290.7692307692308, 70%, 50%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="89.6" fill="hsl(83.07692307692308, 80%, 60%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="76.8" fill="hsl(249.23076923076923, 70%, 50%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="64" fill="hsl(0, 80%, 60%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="51.19999999999999" fill="hsl(263.0769230769231, 70%, 50%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="38.39999999999999" fill="hsl(263.0769230769231, 80%, 60%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="25.599999999999994" fill="hsl(346.1538461538462, 70%, 50%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="10" fill="black"/>
+  </g>
+</svg>

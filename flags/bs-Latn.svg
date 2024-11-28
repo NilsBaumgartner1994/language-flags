@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <g>
+    <circle cx="128" cy="128" r="128" fill="hsl(193.84615384615387, 70%, 50%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="106.66666666666667" fill="hsl(69.23076923076923, 80%, 60%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="85.33333333333334" fill="hsl(332.3076923076923, 70%, 50%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="64" fill="hsl(180, 80%, 60%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="42.66666666666667" fill="hsl(83.07692307692308, 70%, 50%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="21.333333333333343" fill="hsl(0, 80%, 60%)" stroke="black" stroke-width="2"/>
+    <circle cx="128" cy="128" r="10" fill="black"/>
+  </g>
+</svg>
