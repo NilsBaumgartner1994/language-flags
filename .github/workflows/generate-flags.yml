@@ -3,55 +3,35 @@ name: Generate Flags
 on:
   push:
     paths:
-      - scripts/generate-flags.js # Trigger when the script changes
-      - package.json # Trigger when the package changes
-      - .github/workflows/generate-flags.yml # Trigger when the workflow file changes
-  workflow_dispatch: # Allow manual triggering
+      - 'scripts/generate-flags.js'
+      - '.github/workflows/generate-flags.yml'
+  workflow_dispatch:
 
 jobs:
-  generate-icons:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: '18'
 
-      - name: Install dependencies and generate package-lock.json if missing
-        run: |
-          if [ ! -f package-lock.json ]; then
-            echo "package-lock.json does not exist. Generating it..."
-            npm install
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add package-lock.json
-            git commit -m "Add package-lock.json"
-            git push origin main
-          else
-            echo "package-lock.json exists. Proceeding with installation..."
-            npm install
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install dependencies
+        run: npm install
 
-      - name: Run script to generate flags
-        run: |
-          mkdir -p flags # Ensure the flags directory exists
-          node scripts/generate-flags.js
+      - name: Generate flags
+        run: node scripts/generate-flags.js
 
-      - name: Commit and push flags
+      - name: Commit and push changes
         run: |
-          if [ "$(git status --porcelain flags/)" != "" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add flags/
-            git commit -m "Generate language flags"
-            git push origin main
-          else
-            echo "No changes in flags directory. Skipping commit."
-          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add --all flags/
+          git commit -m "Update and delete outdated flags"
+          git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
