@@ -25,9 +25,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install dependencies
-        run: npm install
-
       - name: Clean install (npm ci)
         run: npm ci
 
