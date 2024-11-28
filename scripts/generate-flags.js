@@ -10,19 +10,25 @@ const charToColor = (char) => {
   return `hsl(${hue}, 100%, 50%)`;
 };
 
-// Generate flag for a given language code
-const generateFlag = (langCode) => {
+// Generate donut-shaped flag for a given locale code
+const generateFlag = (isoCode) => {
+  const parts = isoCode.split('-'); // Split into language and region
   const canvas = createCanvas(200, 200);
   const ctx = canvas.getContext('2d');
-  const chars = langCode.split('');
-  const segmentAngle = (2 * Math.PI) / chars.length;
+  const centerRadius = 50; // Radius of the empty center
+  const ringWidth = (100 - centerRadius) / parts.length; // Width of each ring
 
-  chars.forEach((char, index) => {
+  parts.forEach((part, index) => {
+    const color = charToColor(part); // Generate a color for the part
+    const outerRadius = 100 - index * ringWidth; // Outer radius of the ring
+    const innerRadius = outerRadius - ringWidth; // Inner radius of the ring
+
+    // Draw the ring
     ctx.beginPath();
-    ctx.moveTo(100, 100);
-    ctx.arc(100, 100, 100, index * segmentAngle, (index + 1) * segmentAngle);
+    ctx.arc(100, 100, outerRadius, 0, Math.PI * 2);
+    ctx.arc(100, 100, innerRadius, Math.PI * 2, 0, true);
     ctx.closePath();
-    ctx.fillStyle = charToColor(char);
+    ctx.fillStyle = color;
     ctx.fill();
   });
 
