@@ -12,30 +12,31 @@ const charToColor = (char, index) => {
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
 
-// Generate circular flag for a given locale code with black lines
+// Generate circular flag for a given locale code
 const generateFlag = (isoCode) => {
   const chars = isoCode.replace('-', '').split(''); // Remove dash and split into characters
-  const canvas = createCanvas(200, 200);
+  const canvas = createCanvas(256, 256);
   const ctx = canvas.getContext('2d');
-  const ringWidth = 100 / chars.length; // Width of each ring
+
+  const maxRadius = 256 / 2; // Outer radius is half the canvas width
+  const ringWidth = maxRadius / chars.length; // Calculate ring width based on character count
 
   chars.forEach((char, index) => {
     const color = charToColor(char, index); // Generate a color for the character
-    const outerRadius = 100 - index * ringWidth; // Outer radius for the current ring
+    const outerRadius = maxRadius - index * ringWidth; // Outer radius for the current ring
     const innerRadius = outerRadius - ringWidth; // Inner radius for the current ring
 
-    // Draw the ring segment
+    // Draw the colored ring
     ctx.beginPath();
-    ctx.arc(100, 100, outerRadius, 0, Math.PI * 2);
-    ctx.arc(100, 100, innerRadius, Math.PI * 2, 0, true);
+    ctx.arc(128, 128, outerRadius, 0, Math.PI * 2);
+    ctx.arc(128, 128, innerRadius, Math.PI * 2, 0, true);
     ctx.closePath();
     ctx.fillStyle = color;
     ctx.fill();
 
-    // Draw black line to separate this ring
+    // Draw only the outer edge of the ring
     ctx.beginPath();
-    ctx.arc(100, 100, outerRadius, 0, Math.PI * 2);
-    ctx.arc(100, 100, innerRadius, Math.PI * 2, 0, true);
+    ctx.arc(128, 128, outerRadius, 0, Math.PI * 2);
     ctx.closePath();
     ctx.lineWidth = 2; // Line thickness
     ctx.strokeStyle = 'black';
