@@ -63,8 +63,8 @@ const generateBanner = async () => {
   const selectedFlags = isSmallGif ? uniqueFlags.slice(0, 10) : uniqueFlags;
   // randomize selected flags
   console.log(`Selected flags: ${selectedFlags.length}`);
-  console.log(`Randomizing flag order...`);
-  selectedFlags.sort(() => Math.random() - 0.5);
+  // sort by code
+  selectedFlags.sort((a, b) => a.code.localeCompare(b.code));
 
   if (selectedFlags.length === 0) {
     console.error('No valid flags to generate the GIF.');
