@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { createCanvas } = require('canvas');
 const ISO6391 = require('iso-639-1');
-const countries = require('country-codes-list').customList('countryCode', '{officialLanguageISO6391Code}');
+const countries = require('country-codes-list').customList('countryCode', 'officialLanguages');
 
 // Map characters to colors
 const charToColor = (char) => {
@@ -53,13 +53,21 @@ const clearFlagsDirectory = (flagsDir) => {
     console.log('Retrieving country and language codes...');
 
     const locales = Object.entries(countries)
-      .map(([countryCode, langCode]) => {
-        if (ISO6391.validate(langCode)) {
-          return `${langCode}-${countryCode}`;
-        } else {
-          console.warn(`Invalid language code: ${langCode} for country: ${countryCode}`);
+      .flatMap(([countryCode, langs]) => {
+        if (!langs) {
+          console.warn(`No languages found for country: ${countryCode}`);
           return null;
         }
+
+        return langs.split(',').map((langCode) => {
+          langCode = langCode.trim();
+          if (ISO6391.validate(langCode)) {
+            return `${langCode}-${countryCode}`;
+          } else {
+            console.warn(`Invalid language code: ${langCode} for country: ${countryCode}`);
+            return null;
+          }
+        });
       })
       .filter((locale) => locale !== null);
 
