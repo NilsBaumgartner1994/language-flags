@@ -25,8 +25,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install dependencies if needed
-        if: ${{ github.event_name == 'push' && github.event.head_commit.modified && contains(github.event.head_commit.modified, 'package.json') }}
+      - name: Install dependencies if package.json or package-lock.json was edited
+        if: |
+          contains(github.event.head_commit.message, 'package.json') ||
+          contains(github.event.head_commit.message, 'package-lock.json')
         run: npm install
 
       - name: Clean install (npm ci)
