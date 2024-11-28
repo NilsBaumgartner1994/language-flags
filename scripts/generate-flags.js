@@ -1,8 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { createCanvas } = require('canvas');
-const ISO6391 = require('iso-639-1');
-const countries = require('country-codes-list').customList('countryCode', 'officialLanguages');
+const locale = require('locale-codes');
 
 // Map characters to colors
 const charToColor = (char) => {
@@ -50,33 +49,17 @@ const clearFlagsDirectory = (flagsDir) => {
 
   try {
     console.log('Starting flag generation process...');
-    console.log('Retrieving country and language codes...');
+    console.log('Retrieving locale codes...');
 
-    const locales = Object.entries(countries)
-      .flatMap(([countryCode, langs]) => {
-        if (!langs) {
-          console.warn(`No languages found for country: ${countryCode}`);
-          return null;
-        }
-
-        return langs.split(',').map((langCode) => {
-          langCode = langCode.trim();
-          if (ISO6391.validate(langCode)) {
-            return `${langCode}-${countryCode}`;
-          } else {
-            console.warn(`Invalid language code: ${langCode} for country: ${countryCode}`);
-            return null;
-          }
-        });
-      })
-      .filter((locale) => locale !== null);
+    // Get all locales with both language and region
+    const locales = locale.all.filter((loc) => loc.tag.includes('-'));
 
     if (locales.length === 0) {
       console.error('No valid locales found! Exiting.');
       return;
     }
 
-    console.log(`Found ${locales.length} valid locales:`, locales);
+    console.log(`Found ${locales.length} valid locales:`, locales.map((l) => l.tag));
 
     // Ensure the flags directory exists
     if (!fs.existsSync(flagsDir)) {
@@ -87,14 +70,14 @@ const clearFlagsDirectory = (flagsDir) => {
     }
 
     // Generate flags
-    locales.forEach((locale) => {
+    locales.forEach((loc) => {
       try {
-        const buffer = generateFlag(locale);
-        const filePath = path.join(flagsDir, `${locale}.png`);
+        const buffer = generateFlag(loc.tag);
+        const filePath = path.join(flagsDir, `${loc.tag}.png`);
         fs.writeFileSync(filePath, buffer);
-        console.log(`Generated flag for: ${locale}`);
+        console.log(`Generated flag for: ${loc.tag}`);
       } catch (error) {
-        console.error(`Failed to generate flag for: ${locale}`, error);
+        console.error(`Failed to generate flag for: ${loc.tag}`, error);
       }
     });
 
